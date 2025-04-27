@@ -1,9 +1,10 @@
-// Required packages:
-// npm install recharts react-simple-maps d3-geo
-
-import React from 'react';
+import React, { useState } from 'react';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
+import CountryProgress from './CountryProgress'; // import CountryProgress
+import { FaArrowRightLong } from "react-icons/fa6";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { Link, useLocation } from "react-router-dom";
 
 const visitorData = [
   { date: 'Mar 1', value: 400 },
@@ -16,10 +17,36 @@ const visitorData = [
 ];
 
 const demographics = [
-  { country: 'India', percent: 40, color: '#6241ff' },
-  { country: 'USA', percent: 25, color: '#f26c5b' },
-  { country: 'Canada', percent: 10, color: '#ffa726' },
-  { country: 'UAE', percent: 7, color: '#25d4b1' },
+  {
+    flag: "https://flagcdn.com/w40/in.png",
+    country: "India",
+    percent: 40,
+    color: "#6241ff",
+  },
+  {
+    flag: "https://flagcdn.com/w40/us.png",
+    country: "USA",
+    percent: 25,
+    color: "#f26c5b",
+  },
+  {
+    flag: "https://flagcdn.com/w40/ca.png",
+    country: "Canada",
+    percent: 10,
+    color: "#ffa726",
+  },
+  {
+    flag: "https://flagcdn.com/w40/ae.png",
+    country: "UAE",
+    percent: 7,
+    color: "#25d4b1",
+  },
+  {
+    flag: "https://flagcdn.com/w40/pk.png",
+    country: "Pakistan",
+    percent: 2,
+    color: "#02521a",
+  },
 ];
 
 const markers = [
@@ -28,60 +55,81 @@ const markers = [
   { label: '2', coordinates: [53.8478, 23.4241], color: '#25d4b1' },
 ];
 
-const geoUrl =
-  'https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json';
+const geoUrl = 'https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json';
 
 const Dashboard = () => {
+  const [showAll, setShowAll] = useState(false);
+  const { pathname } = useLocation(); // Get current path
+  const displayedCountries = showAll ? demographics : demographics.slice(0, 4);
+
+  const handleToggle = () => {
+    setShowAll(!showAll);
+  };
+
   return (
     <div className="bg-[#0f0f0f] text-white min-h-screen w-full p-8 font-sans">
+      {/* Buttons */}
       <div className="flex gap-4 mb-8">
-        <button className="bg-[#1a1a1a] px-6 py-2 rounded-lg">Overview</button>
-        <button className="bg-[#1a1a1a] px-6 py-2 rounded-lg">Demographics</button>
+        <Link to="/analytics">
+          <button
+            className={`px-6 py-2 rounded-lg ${pathname === '/analytics' ? 'text-white' : 'text-gray-400'}`}
+          >
+            Overview
+          </button>
+        </Link>
+
+        <Link to="/connect">
+          <button
+            className={`px-6 py-2 rounded-lg ${pathname === '/connect' ? 'text-white' : 'text-gray-400'}`}
+          >
+            Demographics
+          </button>
+        </Link>
       </div>
 
+      {/* Visitors and Insights */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-12">
         <div className="col-span-2 bg-[#1a1a1a] p-6 rounded-2xl">
+          {/* Visitors Line Chart */}
           <div className="flex justify-between mb-4">
             <div>
               <div className='flex gap-4'>
-                <select className="bg-[#0f0f0f] text-gray-300 text-sm rounded-md px-3 py-1 border border-gray-700">
+                <select className="bg-[#0f0f0f] text-gray-300 text-sm rounded-md px-3 py-1 border border-gray-800">
                   <option value="Visitors">Visitors</option>
                   <option value="Admin">Admin</option>
                   <option value="Regular">Regular</option>
                 </select>
-                <select className="bg-[#0f0f0f] text-gray-300 text-sm rounded-md px-3 py-1 border border-gray-700">
+                <select className="bg-[#0f0f0f] text-gray-300 text-sm rounded-md px-3 py-1 border border-gray-800">
                   <option value="30">Last 30 days</option>
                   <option value="15">Last 15 days</option>
                   <option value="7">Last 7 days</option>
                 </select>
+                <select className="bg-[#0f0f0f] text-gray-300 text-sm rounded-md px-3 py-1 border border-gray-800">
+                  <option value="30">+ Add</option>
+                  <option value="15">Connects</option>
+                  <option value="7">Interactions</option>
+                  <option value="7">Impressions</option>
+                </select>
               </div>
               <div className='flex justify-center items-center gap-4 mt-4'>
                 <div className="text-4xl font-bold">13.49K</div>
-                <div className=" text-sm">
+                <div className="text-sm">
                   <p className='text-green-400'>+469%</p>
                   <p className='text-gray-400'>(897)</p>
                 </div>
               </div>
             </div>
-            {/* Filter Dropdown */}
-
           </div>
           <div className="bg-[#0f0f0f] h-48 rounded-lg">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={visitorData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <Line
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#ffffff"
-                  strokeWidth={2}
-                  dot={false}
-                />
+                <Line type="monotone" dataKey="value" stroke="#ffffff" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-
+        {/* Insights Panel */}
         <div className="bg-[#1a1a1a] p-6 rounded-2xl">
           <h2 className="text-xl font-semibold mb-6">Insights</h2>
           <div className="mb-6">
@@ -98,9 +146,11 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Demographics Section */}
       <div>
         <h2 className="text-2xl font-bold mb-6">Demographics</h2>
         <div className="bg-[#1a1a1a] p-6 rounded-2xl flex flex-col md:flex-row gap-6">
+          {/* Map */}
           <div className="w-full md:w-2/3 h-[400px] relative">
             <ComposableMap projection="geoEqualEarth" projectionConfig={{ scale: 120 }}>
               <Geographies geography={geoUrl}>
@@ -116,7 +166,8 @@ const Dashboard = () => {
                   <text
                     textAnchor="middle"
                     y={5}
-                    style={{ fontFamily: 'sans-serif', fill: '#fff', fontSize: 10, fontWeight: 'bold' }}>
+                    style={{ fontFamily: 'sans-serif', fill: '#fff', fontSize: 10, fontWeight: 'bold' }}
+                  >
                     {label}
                   </text>
                 </Marker>
@@ -124,17 +175,33 @@ const Dashboard = () => {
             </ComposableMap>
           </div>
 
-          <div className="w-full md:w-1/3">
-            {demographics.map((item, index) => (
-              <div key={index} className="mb-4">
-                <div className="flex justify-between text-sm mb-1">
-                  <span>{item.country}</span>
-                  <span>{item.percent}%</span>
-                </div>
-                <div className="h-2 rounded-full" style={{ backgroundColor: item.color }}></div>
-              </div>
+          <div className="w-full md:w-2/3">
+            {displayedCountries.map((item, index) => (
+              <CountryProgress
+                key={index}
+                flag={item.flag}
+                country={item.country}
+                percent={item.percent}
+                color={item.color}
+              />
             ))}
-            <button className="mt-2 text-sm text-blue-400 hover:underline">View all countries</button>
+
+            <div className="flex justify-end">
+              <button
+                onClick={handleToggle}
+                className="mt-2 text-sm text-blue-400 hover:underline flex items-center gap-2"
+              >
+                {showAll ? (
+                  <>
+                    <FaArrowLeftLong className='mt-1' /> Show less countries
+                  </>
+                ) : (
+                  <>
+                    View all countries <FaArrowRightLong className='mt-1' />
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
