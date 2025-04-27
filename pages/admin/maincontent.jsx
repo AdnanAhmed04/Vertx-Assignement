@@ -11,7 +11,7 @@ const pageTitles = {
 };
 
 const visitorData = [
-  { date: 'Mar 1', value: 100 }, { date: 'Mar 2', value: 400 }, { date: 'Mar 3', value: 800 },
+  { date: 'Mar 1', value: 200 }, { date: 'Mar 2', value: 400 }, { date: 'Mar 3', value: 800 },
   { date: 'Mar 4', value: 1200 }, { date: 'Mar 5', value: 1400 }, { date: 'Mar 6', value: 1100 },
   { date: 'Mar 7', value: 950 }, { date: 'Mar 8', value: 1050 }, { date: 'Mar 9', value: 1150 },
   { date: 'Mar 10', value: 1100 }, { date: 'Mar 11', value: 850 }, { date: 'Mar 12', value: 750 },
@@ -24,10 +24,10 @@ const visitorData = [
 ];
 
 const demographics = [
-  { flag: "https://flagcdn.com/w40/in.png", country: "India", percent: 40, color: "#6241ff" },
-  { flag: "https://flagcdn.com/w40/us.png", country: "USA", percent: 25, color: "#f26c5b" },
-  { flag: "https://flagcdn.com/w40/ca.png", country: "Canada", percent: 10, color: "#ffa726" },
-  { flag: "https://flagcdn.com/w40/ae.png", country: "UAE", percent: 7, color: "#25d4b1" },
+  { flag: "https://flagcdn.com/w40/in.png", country: "India", percent: 40, color: "#6043f2" },
+  { flag: "https://flagcdn.com/w40/us.png", country: "USA", percent: 25, color: "#cf6005" },
+  { flag: "https://flagcdn.com/w40/ca.png", country: "Canada", percent: 10, color: "#edba3a" },
+  { flag: "https://flagcdn.com/w40/ae.png", country: "UAE", percent: 7, color: "#06be68" },
   { flag: "https://flagcdn.com/w40/pk.png", country: "Pakistan", percent: 2, color: "#02521a" },
 ];
 
@@ -62,7 +62,7 @@ const CustomDropdown = ({ options, selected, setSelected }) => {
                 setSelected(option);
                 setIsOpen(false);
               }}
-              className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-900"
+              className="block w-full px-4 py-2 text-left text-sm hover:bg-[#171717]"
             >
               {option}
             </button>
@@ -87,113 +87,143 @@ const Dashboard = () => {
     <div className="bg-[#080808] min-h-screen text-white font-sans">
       
       {/* Navigation Buttons */}
-      <div className="flex justify-between items-center p-4 border-b border-[#171717]">
-        <div className="flex gap-4">
+      <div className="flex justify-between items-center  bg-[#000000] ">
+        <div className="flex ">
           {Object.entries(pageTitles).map(([path, title]) => (
             <Link key={path} to={path}>
-              <button className={`px-4 py-2 border border-[#171717] rounded-md ${pathname === path ? 'text-white' : 'text-gray-400'} hover:bg-[#171717]`}>
+              <button className={`px-4 py-2 border border-[#171717]  ${pathname === path ? 'text-white' : 'text-gray-400'} hover:bg-[#171717]`}>
                 {title}
               </button>
             </Link>
           ))}
         </div>
-        <div className="text-sm cursor-pointer hover:underline">More</div>
+        <div className="text-sm cursor-pointer hover:underline px-8 py-2 border border-[#171717] hidden md:block">More</div>
       </div>
 
       {/* Main Section */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 p-6">
-        {/* Chart Section */}
-        <div className="col-span-1 xl:col-span-2 space-y-6">
-          <div className="bg-black p-6 rounded-2xl">
-            <p className="text-2xl font-bold mb-6">{pageTitle}</p>
 
-            {/* Dropdowns */}
-            <div className="flex flex-wrap gap-4 mb-6">
-              <CustomDropdown options={["Visitors", "Admin", "Regular"]} selected={userType} setSelected={setUserType} />
-              <CustomDropdown options={["Last 30 days", "Last 15 days", "Last 7 days"]} selected={timeRange} setSelected={setTimeRange} />
-              <CustomDropdown options={["+ Add", "Connects", "Interactions", "Impressions"]} selected={metric} setSelected={setMetric} />
-            </div>
+  {/* Left Section (Chart + Title inside Card) */}
+  <div className="col-span-1 xl:col-span-2 flex flex-col">
+    <div className="bg-black p-6 rounded-2xl flex flex-col flex-grow h-full">
+      
+      {/* Title */}
+      <p className="text-2xl font-bold mb-6">{pageTitle}</p>
 
-            {/* Stats */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="text-4xl font-bold">13.49K</div>
-              <div className="text-green-400 text-sm">
-                +469%<br />
-                <span className="text-gray-400">(897)</span>
-              </div>
-            </div>
+      {/* Dropdowns */}
+      <div className="flex flex-wrap gap-4 mb-6">
+        <CustomDropdown options={["Visitors", "Admin", "Regular"]} selected={userType} setSelected={setUserType} />
+        <CustomDropdown options={["Last 30 days", "Last 15 days", "Last 7 days"]} selected={timeRange} setSelected={setTimeRange} />
+        <CustomDropdown options={["+ Add", "Connects", "Interactions", "Impressions"]} selected={metric} setSelected={setMetric} />
+      </div>
 
-            {/* Line Chart */}
-            <div className="h-48">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={visitorData}>
-                  <XAxis dataKey="date" stroke="#888" fontSize={12} />
-                  <YAxis stroke="#888" fontSize={12} domain={[0, 2000]} />
-                  <Line type="linear" dataKey="value" stroke="#ffffff" strokeWidth={2} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
-
-        {/* Insights Section */}
-        <div className="bg-black p-6 rounded-2xl flex flex-col gap-6">
-          <h2 className="text-2xl font-bold">Insights</h2>
-          <div>
-            <p className="text-gray-400">Founders</p>
-            <p className="text-3xl font-bold">7.4K</p>
-            <p className="text-green-400 text-sm">+000%</p>
-          </div>
-          <div>
-            <p className="text-gray-400">Investors</p>
-            <p className="text-3xl font-bold">6.09K</p>
-            <p className="text-green-400 text-sm">+000%</p>
-            <button className="text-blue-400 text-sm mt-2 hover:underline">View detailed insights</button>
-          </div>
+      {/* Stats */}
+      <div className="flex items-center gap-4 mb-6">
+        <div className="text-4xl font-bold">13.49K</div>
+        <div className="text-green-400 text-sm">
+          +469%<br />
+          <span className="text-gray-400">(897)</span>
         </div>
       </div>
 
-      {/* Demographics Section */}
-      <div className="p-6 space-y-6">
-        <h2 className="text-2xl font-bold">Demographics</h2>
-        <div className="flex flex-col xl:flex-row gap-6 bg-[#1a1a1a] p-6 rounded-2xl">
-          {/* Map */}
-          <div className="w-full xl:w-2/3 h-[400px]">
-            <ComposableMap projection="geoEqualEarth" projectionConfig={{ scale: 120 }}>
-              <Geographies geography={geoUrl}>
-                {({ geographies }) => geographies.map((geo) => (
-                  <Geography key={geo.rsmKey} geography={geo} fill="#1f1f1f" stroke="#444" />
-                ))}
-              </Geographies>
-              {markers.map(({ label, coordinates, color }, idx) => (
-                <Marker key={idx} coordinates={coordinates}>
-                  <circle r={10} fill={color} stroke="#000" strokeWidth={2} />
-                  <text textAnchor="middle" y={5} className="text-xs font-bold" fill="#fff">{label}</text>
-                </Marker>
-              ))}
-            </ComposableMap>
-          </div>
-
-          {/* Country Progress */}
-          <div className="w-full xl:w-1/3 space-y-4">
-            {displayedCountries.map((country, index) => (
-              <CountryProgress key={index} {...country} />
-            ))}
-            <div className="flex justify-end">
-              <button
-                onClick={() => setShowAll(!showAll)}
-                className="text-blue-400 text-sm flex items-center gap-2 hover:underline"
-              >
-                {showAll ? (
-                  <><FaArrowLeftLong /> Show less</>
-                ) : (
-                  <><FaArrowRightLong /> View all</>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Line Chart */}
+      <div className="flex-grow  h-48 min-h-[200px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={visitorData}>
+            <XAxis dataKey="date" stroke="#888" fontSize={10} />
+            <YAxis stroke="#888" fontSize={10} domain={[200, 2000]} />
+            <Line type="linear" dataKey="value" stroke="#ffffff" strokeWidth={2} dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
+
+    </div>
+  </div>
+
+  {/* Right Section (Insights) */}
+  <div className="bg-black p-6 rounded-2xl flex flex-col justify-between h-full">
+  <h2 className="text-2xl font-bold mb-6">Insights</h2>
+  <div className="space-y-6 flex-grow">
+    <div>
+      <p className="text-gray-400">Founders</p>
+      <p className="text-3xl font-bold">7.4K</p>
+      <p className="text-green-400 text-sm">+000%</p>
+    </div>
+    <div>
+      <p className="text-gray-400">Investors</p>
+      <p className="text-3xl font-bold">6.09K</p>
+      <p className="text-green-400 text-sm">+000%</p>
+
+      <hr className="border-gray-600 my-6 w-full" />
+
+      <button className="text-blue-400 text-sm mt-2 hover:underline flex items-center gap-3">
+  View detailed insights <span><FaArrowRightLong  className='mt-1'/></span>
+</button>
+
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+
+     {/* Demographics Section */}
+<div className="p-6 space-y-2">
+  
+  <div className="flex flex-col xl:flex-row gap-6 bg-[#000000] p-6 rounded-2xl relative overflow-hidden">
+    
+    {/* Map Container */}  <h2 className="text-2xl font-bold">Demographics</h2>
+
+    <div className="w-full xl:w-2/3 relative">
+      {/* Static Map Image */}
+      <img 
+        src="../../../public/img1.png" 
+        alt="World Map" 
+        className="w-full h-[200px] md:h-[450px]  rounded-2xl"
+      />
+
+      {/* Markers
+      {markers.map(({ label, x, y, color }, idx) => (
+        <div
+          key={idx}
+          className="absolute flex flex-col items-center"
+          style={{
+            top: `${y}%`,  // y: vertical position (percent)
+            left: `${x}%`, // x: horizontal position (percent)
+            transform: 'translate(-50%, -50%)', // center the marker
+          }}
+        >
+          <div 
+            className="w-5 h-5 rounded-full border-2 border-black"
+            style={{ backgroundColor: color }}
+          />
+          <span className="text-white text-xs font-bold mt-1">{label}</span>
+        </div>
+      ))} */}
+    </div>
+
+    {/* Country Progress */}
+    <div className="w-full xl:w-1/3 space-y-4">
+      {displayedCountries.map((country, index) => (
+        <CountryProgress key={index} {...country} />
+      ))}
+      <div className="flex justify-end">
+        <button
+          onClick={() => setShowAll(!showAll)}
+          className="text-blue-400 text-sm flex items-center gap-2 hover:underline"
+        >
+          {showAll ? (
+            <><FaArrowLeftLong /> Show less</>
+          ) : (
+            <>View all</>
+          )}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
       
     </div>
   );

@@ -31,12 +31,9 @@ function App() {
   return (
     <Router>
       <div className="dark bg-black min-h-screen text-white flex flex-col">
-        {/* Topbar */}
         <Topbar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
-        {/* Content */}
         <div className="flex flex-1">
-          {/* Sidebar */}
           <div
             ref={sidebarRef}
             className={`fixed top-0 left-0 h-full w-64 bg-black border-r border-[#171717] z-40 transform transition-transform duration-300 md:relative md:translate-x-0 ${
@@ -44,21 +41,21 @@ function App() {
             }`}
           >
             <div className="pt-16 md:pt-0">
-              {/* Padding for topbar on mobile */}
               <Sidenavbar />
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1 ml-0  p-4">
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/connect" element={<Connect />} />
-              <Route path="/dealroom" element={<Dealroom />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/settings" element={<Settings />} />
-            </Routes>
+          <div className="flex-1 ml-0 border-l border-[#171717]">
+            <div className="h-full w-full rounded-lg  ">
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/connect" element={<Connect />} />
+                <Route path="/dealroom" element={<Dealroom />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/settings" element={<Settings />} />
+              </Routes>
+            </div>
           </div>
         </div>
       </div>

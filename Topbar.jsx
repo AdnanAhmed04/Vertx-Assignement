@@ -16,7 +16,7 @@ const Topbar = ({ sidebarOpen, toggleSidebar }) => {
   const pageTitle = pageTitles[location.pathname] || "Page";
 
   return (
-    <div className="border-b border-[#171717] flex items-center justify-between px-4 py-3 bg-black sticky top-0 z-50">
+    <div className="border-b border-[#171717] flex items-center justify-between px-4  bg-black sticky top-0 z-50">
       {/* Left: Sidebar toggle + Titles */}
       <div className="flex items-center gap-4">
         {/* Hamburger / Close button */}
@@ -33,16 +33,16 @@ const Topbar = ({ sidebarOpen, toggleSidebar }) => {
         </button>
 
         {/* Company + Page Title */}
-        <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-          <p className="text-sm font-semibold">Vertxlabs, Inc</p>
-          <p className="text-lg font-bold">{pageTitle}</p>
+        <div className="flex flex-col md:p-0 md:flex-row md:items-center gap-1 md:gap-4">
+          <p className="text-sm font-semibold md:text-xl">Vertxlabs, Inc</p>
+          <p className="text-sm font-semibold md:px-30 lg:px-34 md:text-2xl">{pageTitle}</p>
         </div>
       </div>
 
       {/* Right: Buttons */}
-      <div className="hidden md:flex items-center gap-4">
-        <button className="border border-[#171717] rounded-md px-4 py-2 hover:bg-[#171717] transition text-sm">Activity</button>
-        <button className="border border-[#171717] rounded-md px-4 py-2 hover:bg-[#171717] transition text-sm">Log out</button>
+      <div className="hidden md:flex items-center ">
+        <button className="border border-[#171717] px-4 py-3 hover:bg-[#171717] transition text-sm">Activity</button>
+        <button className="border border-[#171717] px-4 py-3 hover:bg-[#171717] transition text-sm">Log out</button>
       </div>
     </div>
   );
