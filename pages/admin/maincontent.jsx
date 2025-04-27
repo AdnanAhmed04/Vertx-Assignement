@@ -108,7 +108,7 @@ const Dashboard = () => {
     <div className="bg-black p-6 rounded-2xl flex flex-col flex-grow h-full">
       
       {/* Title */}
-      <p className="text-2xl font-bold mb-6">{pageTitle}</p>
+      <p className=" text-2xl font-bold mb-6">{pageTitle}</p>
 
       {/* Dropdowns */}
       <div className="flex flex-wrap gap-4 mb-6">

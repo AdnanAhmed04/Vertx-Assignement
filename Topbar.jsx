@@ -34,8 +34,8 @@ const Topbar = ({ sidebarOpen, toggleSidebar }) => {
 
         {/* Company + Page Title */}
         <div className="flex flex-col md:p-0 md:flex-row md:items-center gap-1 md:gap-4">
-          <p className="text-sm font-semibold md:text-xl">Vertxlabs, Inc</p>
-          <p className="text-sm font-semibold md:px-30 lg:px-34 md:text-2xl">{pageTitle}</p>
+          <p className="text-sm font-semibold md:text-xl p-2">Vertxlabs, Inc</p>
+          <p className="text-sm font-semibold hidden md:block  md:px-30 lg:px-34 md:text-2xl">{pageTitle}</p>
         </div>
       </div>
 
