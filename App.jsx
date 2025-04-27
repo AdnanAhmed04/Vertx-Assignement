@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/admin/maincontent";
 import Sidenavbar from "./pages/admin/sidenavbar";
 import Analytics from "./pages/admin/Analytics";
@@ -7,45 +7,50 @@ import Connect from "./pages/admin/Connect";
 import Dealroom from "./pages/admin/Dealroom";
 import Profile from "./pages/admin/Profile";
 import Settings from "./pages/admin/Settings";
-
-// Create a small component to show the page name
-const Topbar = () => {
-  const location = useLocation();
-
-  // Mapping URL paths to Page Names
-  const pageTitles = {
-    "/": "Dashboard",
-    "/analytics": "Analytics",
-    "/connect": "Connect",
-    "/dealroom": "Dealroom",
-    "/profile": "Profile",
-    "/settings": "Settings",
-  };
-
-  const pageTitle = pageTitles[location.pathname] || "Page";
-
-  return (
-    <div className="p-4 border border-gray-700 flex gap-[12%]">
-      <p>Vertxlabs, Inc</p>
-      <p>{pageTitle}</p>
-    </div>
-  );
-};
+import Topbar from "./Topbar";
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null);
+
+  const toggleSidebar = () => {
+    setSidebarOpen((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <Router>
-      <div className="dark bg-black min-h-screen text-white">
-        {/* Top bar */}
-        <Topbar />
+      <div className="dark bg-black min-h-screen text-white flex flex-col">
+        {/* Topbar */}
+        <Topbar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
-        {/* Main content area */}
-        <div className="flex">
+        {/* Content */}
+        <div className="flex flex-1">
           {/* Sidebar */}
-          <Sidenavbar />
+          <div
+            ref={sidebarRef}
+            className={`fixed top-0 left-0 h-full w-64 bg-black border-r border-[#171717] z-40 transform transition-transform duration-300 md:relative md:translate-x-0 ${
+              sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+          >
+            <div className="pt-16 md:pt-0">
+              {/* Padding for topbar on mobile */}
+              <Sidenavbar />
+            </div>
+          </div>
 
-          {/* Pages */}
-          <div className="flex-1 p-8">
+          {/* Main Content */}
+          <div className="flex-1 ml-0  p-4">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/analytics" element={<Analytics />} />
