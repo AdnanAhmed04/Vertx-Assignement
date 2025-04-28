@@ -8,6 +8,7 @@ import Dealroom from "./pages/admin/Dealroom";
 import Profile from "./pages/admin/Profile";
 import Settings from "./pages/admin/Settings";
 import Topbar from "./Topbar";
+import Adminlanding from "./pages/admin/adminlanding";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -48,7 +49,7 @@ function App() {
           <div className="flex-1 ml-0 border-l border-[#171717]">
             <div className="h-full w-full rounded-lg  ">
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/" element={<Adminlanding />} />
                 <Route path="/analytics" element={<Analytics />} />
                 <Route path="/connect" element={<Connect />} />
                 <Route path="/dealroom" element={<Dealroom />} />
